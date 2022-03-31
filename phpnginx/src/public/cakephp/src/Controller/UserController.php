@@ -11,6 +11,7 @@ class UserController extends AppController
         $session = $this->getRequest()->getSession();
         $session->delete('email');
         $session->delete('name');
+        $session->delete('user_id');
         parent::initialize();
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
@@ -32,6 +33,7 @@ class UserController extends AppController
                     if($t->email==$t_user->email && $t->password==$t_user->password){
                         $this->Flash->success(__('Login Successfull.'));
                         $session = $this->getRequest()->getSession();
+                        $session->write('user_id', $t->user_id);
                         $session->write('email', $t->email);
                         $session->write('name', $t->name);
                         return $this->redirect(['controller'=>'chat','action' => 'index']);

@@ -29,11 +29,11 @@ class T_feedTable extends Table
         $validator
             ->notEmptyString('name')
             ->minLength('name', 1)
-            ->maxLength('name', 255)
+            ->maxLength('name', 255);
 
-            ->notEmptyString('message')
-            ->minLength('message', 1)
-            ->maxLength('message', 255);
+            // ->notEmptyString('message')
+            // ->minLength('message', 1)
+            // ->maxLength('message', 255);
 
         return $validator;
     }
