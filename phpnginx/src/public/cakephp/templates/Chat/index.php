@@ -1,5 +1,9 @@
 <!-- File: templates/Articles/index.php  (delete links added) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 <?php
+
+use App\Model\Entity\T_feed;
+
 $session = $this->request->getSession();
 if($session->read('email') != "" && $session->read('name') != ""){
     $dis='enabled';
@@ -79,10 +83,10 @@ $user_id=$session->read('user_id');
             white-space: nowrap;
             min-width: 40%;
         }
-        .custom-file-upload :hover{
+        /* .custom-file-upload :hover{
             border-radius: .4rem;
             background-color: rgb(133,133,133);
-        }
+        } */
         input[type=submit]{
             margin-top: 20px;
             min-width: 50%;
@@ -117,6 +121,7 @@ $user_id=$session->read('user_id');
             flex: 9;
             padding: 5px;
             position: relative;
+            overflow: hidden;
         }
         .avatar{
             border-radius: 50%;
@@ -125,7 +130,6 @@ $user_id=$session->read('user_id');
         }
         .a_name{
             display: none;
-            width: 50px;
             margin: 0px 2px;
             padding: 5px 10px;
             text-align: center;
@@ -134,6 +138,7 @@ $user_id=$session->read('user_id');
             background-color: rgba(0, 0, 0, 0.5);
             border-radius: 2px;
             color: white;
+            /* text-overflow: clip; */
         }
         .user_head:hover .a_name{
             display: block;
@@ -154,6 +159,7 @@ $user_id=$session->read('user_id');
             color: #606c76;
             font-size: 16px;
             max-width: 60%;
+            word-wrap: break-word;
         }
         .edite{
             padding-right: 10px;
@@ -251,12 +257,13 @@ $user_id=$session->read('user_id');
                 <div>
                     <div class="usname"><?php echo $t_feed->name ?></div>
                 </div>
-                <div>
+                <div class="mess">
                     <img src="<?php echo "img/".$t_feed->stamp_id.".png" ; ?>" alt="">
-                <!-- </div>
-                <div class="mess"> -->
                     <div class="<?php echo $dis ;?>">
-                        <?= $this->Html->link($t_feed->message, ['action' => 'view', $t_feed->id]) ?>
+                        <!-- <?= $this->Html->link($t_feed->message, ['action' => 'view', $t_feed->id]) ?> -->
+                        <?php
+                            echo $t_feed->message;
+                        ?>
                     </div>
                 </div>
                 <?php
@@ -264,7 +271,7 @@ $user_id=$session->read('user_id');
                     $file=$t_feed->image_file_name;
                     if(substr($file,-3,4)=="mp4" || substr($file,-3,4)=="ogg"){
                         echo "<div class='anh'>";
-                        echo "<video height='100px' controls autoplay preload>
+                        echo "<video height='200px' controls preload>
                             <source src='/video/$file' type='video/mp4'>
                             <source src='/video/$file' type='video/ogg'>
                         Your browser does not support the video tag.
@@ -293,20 +300,23 @@ $user_id=$session->read('user_id');
                         <?= $t_feed->update_at->format(DATE_RFC850) ?>
                     </div>
                 </div>
-                <div class="<?php echo $dis;?>">
-                    <span class="edite">
-                        <?= $this->Html->link('View', ['action' => 'view', $t_feed->id]) ?>
-                    </span>
-                    <span class="edite">
-                        <?= $this->Html->link('Edit', ['action' => 'edit', $t_feed->id]) ?>
-                    </span>
-                    <span class="edite">
-                        <?= $this->Form->postLink(
-                            'Delete',
-                            ['action' => 'delete','class'=>'edite', $t_feed->id],
-                            ['confirm' => 'Are you sure?'])
-                        ?>
-                    </span>
+                <div class="<?php echo $dis;?>" style="margin-top: 10px; padding-top:10px; border-top:1px solid #d3d3d3;">
+                    <?php
+                    if($t_feed->user_id==$session->read('user_id')){
+                        echo "<span class='edite'>";
+                        echo $this->Html->link('View', ['action' => 'view', $t_feed->id]);
+                        echo "</span>";
+                        echo "<span class='edite'>";
+                        echo $this->Html->link('Edit', ['action' => 'edit', $t_feed->id]);
+                        echo "</span>";
+                        echo "<span class='edite'>";
+                        echo $this->Form->postLink(
+                                'Delete',
+                                ['action' => 'delete','class'=>'edite', $t_feed->id],
+                                ['confirm' => 'Are you sure?']);
+                        echo "</span>";
+                    }
+                    ?>
                 </div>
             </div>
             </div>

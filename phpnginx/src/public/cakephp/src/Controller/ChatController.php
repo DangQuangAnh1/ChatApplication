@@ -109,7 +109,7 @@ class ChatController extends AppController
             }
 
             if ($this->T_feed->save($t_feed)) {
-                $this->Flash->success(__('Your chat has been updated.'));
+                // $this->Flash->success(__('Your chat has been updated.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('Unable to update your chat.'));
@@ -122,7 +122,7 @@ class ChatController extends AppController
 
         $t_feed = $this->T_feed->findById($id)->firstOrFail();
         if ($this->T_feed->delete($t_feed)) {
-            $this->Flash->success(__('The feed has been deleted.'));
+            // $this->Flash->success(__('The feed has been deleted.'));
             return $this->redirect(['action' => 'index']);
         }
     }

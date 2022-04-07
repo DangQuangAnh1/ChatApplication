@@ -72,6 +72,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             top: 16px;
             right: -50px;
             animation: hi ease 0.5s;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
         }
         @-webkit-keyframes hi {
             from {

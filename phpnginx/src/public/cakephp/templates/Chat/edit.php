@@ -68,6 +68,16 @@ $user_id=$session->read('user_id');
     .emoj_box button img{
         height: 75px;
     }
+    .preview{
+        text-align: left;
+        margin-bottom: 20px;
+    }
+    .anh img{
+        height: 100px;
+        }
+    .anh{
+        padding: 5px 0px;
+    }
 </style>
 <center>
     <h1>Edit Chat</h1>
@@ -79,12 +89,42 @@ $user_id=$session->read('user_id');
         echo $this->Form->control('id', ['type' => 'hidden']);
         echo $this->Form->control('name', ['value' => $session->read('name'),'disabled'=>'disabled']);
         echo $this->Form->control('message', ['rows' => '3']);
-        echo "<img src='/img/$t_feed->image_file_name' alt=''>";
+        echo "<label>Current file</label>";
+        if($t_feed->image_file_name!=""){
+            $file=$t_feed->image_file_name;
+            if(substr($file,-3,4)=="mp4" || substr($file,-3,4)=="ogg"){
+                echo "<div class='anh'>";
+                echo "<video height='100px' controls autoplay preload>
+                    <source src='/video/$file' type='video/mp4'>
+                    <source src='/video/$file' type='video/ogg'>
+                Your browser does not support the video tag.
+                </video>
+                ";
+                // echo $this->Html->media($file, [
+                //     'fullBase' => true,
+                //     'text' => 'Fallback text'
+                // ]);
+                echo "</div>";
+            }
+            else {
+                echo "<div class='anh'>";
+                echo $this->Html->image($file);
+                echo "</div>";
+            }
+        }
         echo "<div class='img-md-form'>";
         echo "<label class='custom-file-upload'>";
-        echo $this->Form->control('Upload_file',['type' => 'file','disabled'=>$dis]);
+        echo $this->Form->control('Upload_file',['type' => 'file','disabled'=>$dis,'onchange'=>'readURL(this);']);
         echo "</label>";
         echo "</div>";
+        echo "<div class='preview'>";
+            echo "<img id='blah' src='#' alt=''/>";
+            echo "<video id='blah2' height='0px' controls autoplay preload>
+                    <source src='#' type='video/mp4'>
+                    <source src='#' type='video/ogg'>
+                    Your browser does not support the video tag.
+                  </video>";
+            echo "</div>";
         echo "<div class='emoj_box'>";
         for($count=1;$count<=24;$count++){
             $filename=$count.".png";
@@ -99,3 +139,26 @@ $user_id=$session->read('user_id');
         echo $this->Form->end();
     ?>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" type="text/javascript"></script>
+<script>
+    function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        var url = input.value;
+        var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+        if(ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg"){
+            reader.onload = function (e) {
+            $('#blah').attr('src', e.target.result).height(100);
+            $('#blah2').height(0);
+        };
+        }
+        else if(ext == "ogg" || ext == "mp4"){
+            reader.onload = function (e) {
+            $('#blah2').attr('src', e.target.result).height(100);
+            $('#blah').height(0);
+        };
+        }
+    }
+    reader.readAsDataURL(input.files[0]);
+    }
+</script>
