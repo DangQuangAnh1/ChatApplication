@@ -1,28 +1,28 @@
-<!-- File: templates/Articles/add.php -->
 <?php
 $session = $this->request->getSession();
-if($session->read('email') != "" && $session->read('name') != ""){
-    $dis='enabled';
+if ($session->read('email') != "" && $session->read('name') != "") {
+    $is_disable_class = 'enabled';
+} else {
+    $is_disable_class = 'disabled';
 }
-else{
-    $dis='disabled';
-}
-$user_id=$session->read('user_id');
+$user_id = $session->read('user_id');
 ?>
 <style>
-    .addchat{
+    .addchat {
         width: 40%;
         margin: auto;
         background-color: white;
         padding: 40px;
         border-radius: 10px;
         border: 2px solid lightblue;
-        box-shadow: 2px ;
+        box-shadow: 2px;
         text-align: left;
     }
-    input[type=file]{
+
+    input[type=file] {
         display: none;
     }
+
     .custom-file-upload {
         background-color: #5B7DB1;
         border-radius: .4rem;
@@ -40,32 +40,44 @@ $user_id=$session->read('user_id');
         white-space: nowrap;
         min-width: 40%;
     }
-    .custom-file-upload :hover{
-        border-radius: .4rem;
-        background-color: rgb(133,133,133);
+
+    <?php
+    if ($is_disable_class != "disabled") {
+        echo "
+            .custom-file-upload :hover{
+                border-radius: .4rem;
+                background-color: rgb(133,133,133);
+            }";
     }
-    input[type=submit]{
+    ?>
+    
+    input[type=submit] {
         margin-top: 20px;
         min-width: 50%;
     }
-    .custom-file-upload label{
+
+    .custom-file-upload label {
         font-size: 12px;
     }
-    .img-md-form{
+
+    .img-md-form {
         display: flex;
         justify-content: space-between;
     }
-    .emoj_box{
+
+    .emoj_box {
         display: flex;
         overflow-x: scroll;
     }
-    .emoj_box button{ 
+
+    .emoj_box button {
         min-width: 40%;
         min-height: 81px;
         background-color: #eeeeee;
         border: none;
     }
-    .emoj_box button img{
+
+    .emoj_box button img {
         height: 75px;
     }
 </style>
@@ -73,28 +85,29 @@ $user_id=$session->read('user_id');
     <h1>Add Chat</h1>
 </center>
 <div class="addchat">
-    <?php
-        echo $this->Form->create($t_feed,array('type' => 'file'));
-        // Hard code the user for now.
-        echo $this->Form->control('id', ['type' => 'hidden']);
-        echo $this->Form->control('name', ['value' => $session->read('name'),'disabled'=>'disabled']);
-        echo $this->Form->control('message', ['rows' => '3']);
-        echo "<div class='img-md-form'>";
-        echo "<label class='custom-file-upload'>";
-        echo $this->Form->control('Upload_file',['type' => 'file','disabled'=>$dis]);
-        echo "</label>";
-        echo "</div>";
-        echo "<div class='emoj_box'>";
-        for($count=1;$count<=24;$count++){
-            $filename=$count.".png";
-            echo"
-            <button name= 'stamp_id' value=$count >
-                <img src='/img/$filename' alt=''>
-            </button>
-            ";
+    <?= $this->Form->create(NULL, array('url' => 'chat/add', 'type' => 'file')) ?>
+    <?= $this->Form->control('id', ['type' => 'hidden']) ?>
+    <?= $this->Form->control('name', ['value' => $session->read('name'), 'disabled' => 'disabled']) ?>
+    <?= $this->Form->control('message', ['rows' => '3']) ?>
+    <div class='img-md-form'>
+        <label class='custom-file-upload'>
+            <?= $this->Form->control('Upload_file', ['type' => 'file', 'disabled' => $is_disable_class, 'onchange' => 'readURL(this);']) ?>
+        </label>
+    </div>
+    <div class='emoj_box'>
+        <?php
+        for ($count = 1; $count <= 24; $count++) {
+            $filename = $count . ".png";
+            echo "
+                <button name= 'stamp_id' value=$count >
+                    <img src='/img/$filename' alt=''>
+                </button>
+                ";
         }
-        echo"</div>";
-        echo "<center>".$this->Form->control('Send Chat',['type' => 'submit','disabled'=>$dis])."</center>";
-        echo $this->Form->end();
-    ?>
+        ?>
+    </div>
+    <center>
+        <?= $this->Form->control('Send Chat', ['type' => 'submit', 'disabled' => $is_disable_class]) ?>
+    </center>
+    <?= $this->Form->end() ?>
 </div>

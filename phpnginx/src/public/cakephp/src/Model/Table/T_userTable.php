@@ -9,15 +9,11 @@ use Cake\Utility\Text;
 use Cake\Event\EventInterface;
 // the Validator class
 use Cake\Validation\Validator;
-// Add the following method.
 class T_userTable extends Table
 {
     public function initialize(array $config): void
     {
         $this->addBehavior('Timestamp');
-    }
-    public function beforeSave(EventInterface $event, $entity, $options)
-    {
     }
     public function validationDefault(Validator $validator): Validator
     {

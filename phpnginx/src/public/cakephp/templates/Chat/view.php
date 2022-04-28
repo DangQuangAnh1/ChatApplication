@@ -1,10 +1,10 @@
 <?php
 $session = $this->request->getSession();
 if($session->read('email') != "" && $session->read('name') != ""){
-    $dis='enabled';
+    $is_disable_class='enabled';
 }
 else{
-    $dis='disabled';
+    $is_disable_class='disabled';
 }
 $user_id=$session->read('user_id');
 ?>
@@ -30,4 +30,4 @@ $user_id=$session->read('user_id');
 <img src="<?php echo"/img/$t_feed->image_file_name";?>" class="anh">
 <p><small>Create_at: <?= $t_feed->create_at->format(DATE_RFC850) ?></small></p>
 <p><small>Update_at: <?= $t_feed->update_at->format(DATE_RFC850) ?></small></p>
-<p class="<?php echo $dis;?>"><?= $this->Html->link('Edit', ['action' => 'edit', $t_feed->id]) ?></p>
+<p class="<?php echo $is_disable_class;?>"><?= $this->Html->link('Edit', ['action' => 'edit', $t_feed->id]) ?></p>
