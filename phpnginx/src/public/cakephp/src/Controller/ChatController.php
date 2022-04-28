@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Model\Entity\T_feed;
+
 class ChatController extends AppController
 {
     public function initialize(): void
@@ -18,8 +20,12 @@ class ChatController extends AppController
         $this->loadComponent('Paginator');
         // find all element in t_feed table
         $t_feed = $this->Paginator->paginate($this->T_feed->find()->order(['id' => 'DESC']));
-        // find all element in t_user table
-        $t_user = $this->Paginator->paginate($this->T_user->find());
+        // find all element of chatted 
+        $t_user = $this->Paginator->paginate($this->T_user->find()->join([
+            'table' => 't_feed',
+            'type' => 'RIGHT',
+            'conditions' => 'T_user.user_id = t_feed.user_id',
+        ])->group('T_user.user_id'));
         $this->set(compact('t_feed', 't_user'));
     }
     public function view($id = null)
